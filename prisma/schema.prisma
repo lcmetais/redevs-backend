@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  phone     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  deletedAt DateTime?
+  adverts   Advert[]
+  UserPhoto UserPhoto?
+  role      Role       @default(USER)
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Advert {
+  id               String    @id @default(uuid())
+  name             String
+  value            Int
+  shortDescription String
+  longDescription  String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+  specificPhone    String?
+  category         String
+  images           Image[]
+  isApproved       Boolean   @default(false)
+  owner            User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId          String
+}
+
+model Image {
+  id              String    @id @default(uuid())
+  originalName    String
+  imageStorageUrl String
+  advert          Advert    @relation(fields: [advertId], references: [id], onDelete: Cascade)
+  advertId        String
+  createdAt       DateTime  @default(now())
+  deletedAt       DateTime?
+}
+
+model UserPhoto {
+  id            String    @id @default(uuid())
+  originalName  String
+  imageInBase64 String
+  user          User?     @relation(fields: [userId], references: [id])
+  userId        String    @unique
+  createAt      DateTime  @default(now())
+  deleteAt      DateTime?
+}
