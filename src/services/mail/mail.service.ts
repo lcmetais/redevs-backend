@@ -18,11 +18,7 @@ export class MailService {
     }
 
     async sendMail(sendMailObjectDto: SendMailObjectDTO): Promise<void> {
-        const userToSendMail = this.userService.findUserByEmail(sendMailObjectDto.to);
-
         try {
-            console.log(`Enviando email para usuário: ${(await userToSendMail).name}; id: ${(await userToSendMail).id}...`);
-
             await this.transporter.sendMail({
                 from: `Rede VS <lcmetaismg@gmail.com>`,
                 to: sendMailObjectDto.to,

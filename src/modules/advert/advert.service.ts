@@ -6,11 +6,13 @@ import { advertToReturnMapper } from 'src/common/mappers/advert-to-return.mapper
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateAdvertDto } from './dto/create-advert.dto';
 import { UpdateAdvertDto } from './dto/update-advert.dto';
+import { MailService } from 'src/services/mail/mail.service';
 
 @Injectable()
 export class AdvertService {
   constructor(
-    private readonly prisma: PrismaService
+    private readonly prisma: PrismaService,
+    private readonly mailService: MailService 
   ) { }
 
   async create(userId: string, createAdvetDto: CreateAdvertDto) {
@@ -28,11 +30,49 @@ export class AdvertService {
         shortDescription: createAdvetDto.shortDescription,
         longDescription: createAdvetDto.longDescription,
         specificPhone: createAdvetDto.specificPhone,
-        owner: { connect: { id: userId } },
+        owner: { connect: { id: user.id } },
         category: createAdvetDto.category,
         deletedAt: null,
       },
     });
+
+    const htmlContent = `<!DOCTYPE html>
+        <html lang="en">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Novo Anúncio</title>
+        </head>
+        <body style="font-family: Arial, sans-serif;">
+
+            <h1>Um novo anúncio foi criado e </h1>
+            
+            <p>Um novo anúncio foi criado por: ${user.name}, e espera por aprovação.</p>
+            <p>Acesse a página de aprovação de anúncio <a href="http://redevs.com.br/admin/anunciosparaaprovar" style="text-decoration: none; color: #007bff;">aqui</a>.</p>
+            
+            <p>Obrigado,</p>
+            <p>Rede VS</p>
+
+        </body>
+        </html>`;
+
+    const adminUsers = await this.prisma.user.findMany({
+      where: {
+        role: 'ADMIN',
+        deletedAt: null
+      }
+    });
+
+    const toString = '';
+
+    adminUsers.forEach((adminUser) => {toString + `${adminUser.name} <${adminUser.email}>, `});
+
+    await this.mailService.sendMail({
+      to: toString,
+      subject: 'Novo Anúncio',
+      text: '',
+      html: htmlContent
+  });
 
     return advertToReturnMapper(createdAdvert);
   }
