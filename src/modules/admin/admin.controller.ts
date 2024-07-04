@@ -15,6 +15,11 @@ export class AdminController {
     return this.adminService.getAllAdvertsNotApproved(take, skip);
   }
 
+  @Get('/users')
+  getUsers() {
+    return this.adminService.getAllUser();
+  }
+
   @Put('/advertaprrove/:id')
   approveAdvert(@Param('id') id: string) {
     return this.adminService.approveAdvert(id);

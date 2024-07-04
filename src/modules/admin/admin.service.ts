@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
 export class AdminService {
     constructor(
-        private readonly prisma: PrismaService,
+        private readonly prisma: PrismaService
     ) { }
 
     async getAllAdvertsNotApproved(take: number, skip: number) {
@@ -84,5 +84,13 @@ export class AdminService {
         return {
             message: 'Anúncio aprovado com sucesso!'
         }
+    }
+
+    async getAllUser() {
+        return await this.prisma.user.findMany({
+            where: {
+                deletedAt: null
+            }
+        });
     }
 }
