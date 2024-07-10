@@ -20,6 +20,11 @@ export class AdminController {
     return this.adminService.getAllUser();
   }
 
+  @Put('/user/:id')
+  updateRole(@Param('id') userId: string) {
+    return this.adminService.updateUserRole(userId);
+  }
+
   @Put('/advertaprrove/:id')
   approveAdvert(@Param('id') id: string) {
     return this.adminService.approveAdvert(id);

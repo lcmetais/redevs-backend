@@ -95,4 +95,26 @@ export class AdminService {
 
         return users;
     }
+
+    async updateUserRole(id: string) {
+        const user = await this.prisma.user.findFirst({
+            where: { id }
+        });
+
+        if (user.role === "ADMIN") {
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { role: "USER" }
+            });
+        } else {
+            await this.prisma.user.update({
+                where: { id: user.id },
+                data: { role: "ADMIN" }
+            });
+        }
+
+        return {
+            message: 'Permições do usuário atualizadas com sucesso'
+        }
+    }
 }
