@@ -32,24 +32,6 @@ export class UserService {
     return userToReturnMapper(createdUser);
   }
 
-  async findAll() {
-    const allUsers = await this.prisma.user.findMany({
-      include: {
-        adverts: true
-      },
-      where: {
-        deletedAt: {
-          equals: null
-        }
-      }
-    });
-
-    if (!allUsers)
-      throw new UsersNotFoundError("Users not found!");
-
-    return allUsers;
-  }
-
   async findUserById(id: string) {
     const user = await this.prisma.user.findFirst({
       where: {

@@ -11,12 +11,6 @@ export class UserController {
   constructor(private readonly userService: UserService) { }
 
   @IsPublic()
-  @Get('/get')
-  findAll() {
-    return this.userService.findAll();
-  }
-
-  @IsPublic()
   @Get('/get/id/:id')
   findOneById(@Param('id',) id: string) {
     return this.userService.findUserById(id);
