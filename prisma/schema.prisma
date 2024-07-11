@@ -62,3 +62,12 @@ model UserPhoto {
   createAt      DateTime  @default(now())
   deleteAt      DateTime?
 }
+
+model Banner {
+  id         String    @id @default(uuid())
+  bannerName String
+  bannerUrl  String
+  createdAt  DateTime  @default(now())
+  uptatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
+}

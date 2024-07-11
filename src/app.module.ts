@@ -9,6 +9,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
 import { UserModule } from './modules/user/user.module';
 import { UserPhotoModule } from './modules/userphoto/userphoto.module';
 import { MailModule } from './services/mail/mail.module';
+import { BannerModule } from './modules/banner/banner.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { MailModule } from './services/mail/mail.module';
     ImageModule,
     UserPhotoModule,
     AdminModule,
-    MailModule
+    MailModule,
+    BannerModule
   ],
   controllers: [
     AppController,
